@@ -8,11 +8,15 @@ plugins {
 }
 
 group = "cn.aixcyi.plugin"
-version = "0.0.1-SNAPSHOT"  // https://semver.org/lang/zh-CN/
+version = "1.0.0-SNAPSHOT"  // https://semver.org/lang/zh-CN/
 
 repositories {
     mavenLocal()
     mavenCentral()
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-html:0.11.0")
 }
 
 // Gradle IntelliJ Plugin
@@ -20,7 +24,7 @@ repositories {
 intellij {
     type.set("PC")
     version.set("2022.2.5")
-    plugins.set(listOf())
+    plugins.set(listOf("PythonCore"))
 }
 
 // Gradle Changelog Plugin

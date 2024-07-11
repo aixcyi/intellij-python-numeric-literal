@@ -1,24 +1,28 @@
 <!-- 插件配置文件：https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
 
-    <id>cn.aixcyi.templugin</id>
-    <name>Plugin Template</name>
+    <id>cn.aixcyi.pnl</id>
+    <name>HooTool - Python Numeric Literal</name>
     <vendor email="75880483+aixcyi@users.noreply.github.com" url="https://github.com/aixcyi">aixcyi</vendor>
-    <resource-bundle>messages.PluginTemplate</resource-bundle>
+    <resource-bundle>messages.PythonNumericLiteral</resource-bundle>
 
     <!-- 插件兼容性要求：https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.python</depends>
 
     <!-- 插件定义的扩展：https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensionPoints>
     </extensionPoints>
 
     <!-- 插件实现的扩展：https://plugins.jetbrains.com/docs/intellij/plugin-extensions.html -->
-    <extensions defaultExtensionNs="com.intellij">
+    <extensions defaultExtensionNs="com.intellij.lang">
+        <documentationProvider
+                language="Python"
+                implementationClass="cn.aixcyi.plugin.pnl.ui.PythonNumberLiteralProvider"/>
     </extensions>
 
     <!-- action 的 text 中的下划线被转义了，所以需要用双下划线来表示下划线，譬如 "__all__" 要写成 "____all____" -->
-    <actions resource-bundle="messages.PluginTemplate">
+    <actions resource-bundle="messages.PythonNumericLiteral">
     </actions>
 
 </idea-plugin>

@@ -1,6 +1,6 @@
 package cn.aixcyi.plugin.pnl.ui
 
-import cn.aixcyi.plugin.pnl.utils.IntegerLiteralDocBuilder
+import cn.aixcyi.plugin.pnl.utils.PyIntDocumentationBuilder
 import com.intellij.lang.documentation.AbstractDocumentationProvider
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
@@ -30,11 +30,9 @@ class PyNumDocumentationProvider : AbstractDocumentationProvider() {
     override fun generateDoc(element: PsiElement?, originalElement: PsiElement?): String? {
         if (element !is PyNumericLiteralExpression)
             return null
-        if (element.isIntegerLiteral) {
-            return IntegerLiteralDocBuilder.getInstance(element)?.buildMultiRadixTable()
-        } else {
-            // 未来再决定是否处理小数。
-            return null
-        }
+        if (element.isIntegerLiteral)
+            return PyIntDocumentationBuilder.getInstance(element)?.buildMultiRadixTable()
+        // 小数、虚数不作处理
+        return null
     }
 }

@@ -8,12 +8,12 @@ import com.intellij.psi.PsiFile
 import com.jetbrains.python.psi.PyNumericLiteralExpression
 
 /**
- * 展示数字字面值的文档。
+ * Python 数字字面值文档。
  *
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  * @see <a href="https://plugins.jetbrains.com/docs/intellij/code-documentation.html">Documentation | IntelliJ Platform Plugin SDK</a>
  */
-class NumberLiteralDocumentationProvider : AbstractDocumentationProvider() {
+class PyNumDocumentationProvider : AbstractDocumentationProvider() {
 
     override fun getCustomDocumentationElement(
         editor: Editor,

@@ -8,7 +8,6 @@ import com.jetbrains.python.psi.PyExpression
 import com.jetbrains.python.psi.PyNumericLiteralExpression
 import com.jetbrains.python.psi.PyPrefixExpression
 import kotlinx.html.*
-import kotlinx.html.stream.appendHTML
 import java.awt.Color
 import java.math.BigInteger
 
@@ -17,15 +16,16 @@ import java.math.BigInteger
  *
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  */
-class PyIntDocumentationBuilder private constructor(integer: BigInteger) {
+class PyIntDocumentationBuilder
+private constructor(private val expression: PyExpression, integer: BigInteger) {
 
     companion object {
         @JvmStatic
         fun getInstance(expression: PyNumericLiteralExpression): PyIntDocumentationBuilder? {
             if (expression.bigIntegerValue == null)
                 return null
-            val (_, int) = evaluate(Pair(expression, expression.bigIntegerValue!!))
-            return PyIntDocumentationBuilder(int)
+            val (exp, int) = evaluate(Pair(expression, expression.bigIntegerValue!!))
+            return PyIntDocumentationBuilder(exp, int)
         }
 
         private fun evaluate(pair: Pair<PyExpression, BigInteger>): Pair<PyExpression, BigInteger> {
@@ -52,62 +52,59 @@ class PyIntDocumentationBuilder private constructor(integer: BigInteger) {
         .getAttributes(PyHighlighter.PY_NUMBER)
         .foregroundColor
 
-    fun buildMultiRadixTable() = buildString {
-        appendHTML().html {
-            body {
-                multiRadixTable()
+    fun buildMultiRadixTable() = MeowDocumentationBuilder.getInstance()
+        .definition {
+            +expression.text
+        }
+        .contentTable {
+            val codeStyle = "text-align: right; color: ${numberColor.toHtmlRGB()};"
+            val textStyle = "text-align: right;"
+            tr {
+                td { +message("text.Decimal") }
+                td { style = codeStyle; code { +wrapper.toRadix(Radix.DEC) } }
             }
-        }
-    }
-
-    private fun BODY.multiRadixTable() = table("sections") {
-        val codeStyle = "text-align: right; color: ${numberColor.toHtmlRGB()};"
-        val textStyle = "text-align: right;"
-        tr {
-            td { +message("text.Decimal") }
-            td { style = codeStyle; code { +wrapper.toRadix(Radix.DEC) } }
-        }
-        tr {
-            td { +message("text.HexadecimalValue") }
-            td {
-                val hexUpper = wrapper.toRadix(Radix.HEX).uppercase()
-                val hexLower = wrapper.toRadix(Radix.HEX).lowercase()
-                style = textStyle
-                code { +hexUpper }
-                if (hexUpper != hexLower) {
-                    br()
-                    code { +hexLower }
+            tr {
+                td { +message("text.HexadecimalValue") }
+                td {
+                    val hexUpper = wrapper.toRadix(Radix.HEX).uppercase()
+                    val hexLower = wrapper.toRadix(Radix.HEX).lowercase()
+                    style = textStyle
+                    code { +hexUpper }
+                    if (hexUpper != hexLower) {
+                        br()
+                        code { +hexLower }
+                    }
                 }
             }
-        }
-        tr {
-            td { +message("text.HexadecimalCode") }
-            td {
-                val hexUpper = wrapper.toLiteral(Radix.HEX, String::uppercase)
-                val hexLower = wrapper.toLiteral(Radix.HEX, String::lowercase)
-                style = codeStyle
-                code { +hexUpper }
-                if (hexUpper != hexLower) {
-                    br()
-                    code { +hexLower }
+            tr {
+                td { +message("text.HexadecimalCode") }
+                td {
+                    val hexUpper = wrapper.toLiteral(Radix.HEX, String::uppercase)
+                    val hexLower = wrapper.toLiteral(Radix.HEX, String::lowercase)
+                    style = codeStyle
+                    code { +hexUpper }
+                    if (hexUpper != hexLower) {
+                        br()
+                        code { +hexLower }
+                    }
                 }
             }
+            tr {
+                td { +message("text.OctalValue") }
+                td { style = textStyle; code { +wrapper.toRadix(Radix.OCT) } }
+            }
+            tr {
+                td { +message("text.OctalCode") }
+                td { style = codeStyle; code { +wrapper.toLiteral(Radix.OCT) } }
+            }
+            tr {
+                td { +message("text.BinaryValue") }
+                td { style = textStyle; code { +wrapper.toRadix(Radix.BIN) } }
+            }
+            tr {
+                td { +message("text.BinaryCode") }
+                td { style = codeStyle; code { +wrapper.toLiteral(Radix.BIN) } }
+            }
         }
-        tr {
-            td { +message("text.OctalValue") }
-            td { style = textStyle; code { +wrapper.toRadix(Radix.OCT) } }
-        }
-        tr {
-            td { +message("text.OctalCode") }
-            td { style = codeStyle; code { +wrapper.toLiteral(Radix.OCT) } }
-        }
-        tr {
-            td { +message("text.BinaryValue") }
-            td { style = textStyle; code { +wrapper.toRadix(Radix.BIN) } }
-        }
-        tr {
-            td { +message("text.BinaryCode") }
-            td { style = codeStyle; code { +wrapper.toLiteral(Radix.BIN) } }
-        }
-    }
+        .build()
 }

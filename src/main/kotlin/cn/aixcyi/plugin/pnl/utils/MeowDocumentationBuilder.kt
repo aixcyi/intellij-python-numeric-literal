@@ -29,36 +29,33 @@ class MeowDocumentationBuilder private constructor() {
     private val blocks = mutableListOf<BODY.() -> Unit>()
 
     fun definition(block: PRE.() -> Unit): MeowDocumentationBuilder {
-        val typedBlock: BODY.() -> Unit = {
+        blocks.add {
             div(DEFINITION_CLASS) {
                 pre {
                     block()
                 }
             }
         }
-        blocks.add(typedBlock)
         return this
     }
 
     fun content(block: DIV.() -> Unit): MeowDocumentationBuilder {
-        val typedBlock: BODY.() -> Unit = {
+        blocks.add {
             div(CONTENT_CLASS) {
                 block()
             }
         }
-        blocks.add(typedBlock)
         return this
     }
 
     fun contentTable(block: TABLE.() -> Unit): MeowDocumentationBuilder {
-        val typedBlock: BODY.() -> Unit = {
+        blocks.add {
             div(CONTENT_CLASS) {
                 table {
                     block()
                 }
             }
         }
-        blocks.add(typedBlock)
         return this
     }
 

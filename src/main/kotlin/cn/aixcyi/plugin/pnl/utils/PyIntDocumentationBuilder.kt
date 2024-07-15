@@ -1,6 +1,7 @@
 package cn.aixcyi.plugin.pnl.utils
 
 import cn.aixcyi.plugin.pnl.Zoo.message
+import cn.aixcyi.plugin.pnl.storage.PNLSettings
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.jetbrains.python.PyTokenTypes
@@ -48,6 +49,7 @@ private constructor(private val expression: PyExpression, integer: BigInteger) {
     }
 
     private val wrapper = IntegerWrapper(integer)
+    private val state = PNLSettings.getInstance().state
     private val scheme = EditorColorsManager.getInstance().schemeForCurrentUITheme
     private val numberColor = getColor(PyHighlighter.PY_NUMBER)
     private val operationColor = getColor(
@@ -74,51 +76,78 @@ private constructor(private val expression: PyExpression, integer: BigInteger) {
         .contentTable {
             val codeStyle = "text-align: right; ${numberColor.toHtmlStyleCodeRGB()}"
             val textStyle = "text-align: right;"
+            val decCode = wrapper.toLiteral(Radix.DEC, state.decCodeGroupWidth)
+            val decSize = wrapper.toRadix(Radix.DEC, state.decSizeGroupWidth, state.decSizeDelimiter)
+            val hexCodeUpper = wrapper.toLiteral(Radix.HEX, state.hexCodeGroupWidth, String::uppercase)
+            val hexCodeLower = wrapper.toLiteral(Radix.HEX, state.hexCodeGroupWidth, String::lowercase)
+            val hexSizeUpper =
+                wrapper.toRadix(Radix.HEX, state.hexSizeGroupWidth, state.hexSizeDelimiter).uppercase()
+            val hexSizeLower =
+                wrapper.toRadix(Radix.HEX, state.hexSizeGroupWidth, state.hexSizeDelimiter).lowercase()
             tr {
-                td { +message("text.Decimal") }
-                td { style = codeStyle; code { +wrapper.toRadix(Radix.DEC) } }
-            }
-            tr {
-                td { +message("text.HexadecimalValue") }
+                td { +message("text.DecimalSize") }
                 td {
-                    val hexUpper = wrapper.toRadix(Radix.HEX).uppercase()
-                    val hexLower = wrapper.toRadix(Radix.HEX).lowercase()
+                    style = if (decCode != decSize) textStyle else codeStyle
+                    code { +decCode }
+                }
+            }
+            if (decCode != decSize)
+                tr {
+                    td { +message("text.DecimalCode") }
+                    td {
+                        style = codeStyle
+                        code { +decCode }
+                    }
+                }
+            tr {
+                td { +message("text.HexadecimalSize") }
+                td {
                     style = textStyle
-                    code { +hexUpper }
-                    if (hexUpper != hexLower) {
+                    code { +hexSizeUpper }
+                    if (hexSizeUpper != hexSizeLower) {
                         br()
-                        code { +hexLower }
+                        code { +hexSizeLower }
                     }
                 }
             }
             tr {
                 td { +message("text.HexadecimalCode") }
                 td {
-                    val hexUpper = wrapper.toLiteral(Radix.HEX, String::uppercase)
-                    val hexLower = wrapper.toLiteral(Radix.HEX, String::lowercase)
                     style = codeStyle
-                    code { +hexUpper }
-                    if (hexUpper != hexLower) {
+                    code { +hexCodeUpper }
+                    if (hexCodeUpper != hexCodeLower) {
                         br()
-                        code { +hexLower }
+                        code { +hexCodeLower }
                     }
                 }
             }
             tr {
-                td { +message("text.OctalValue") }
-                td { style = textStyle; code { +wrapper.toRadix(Radix.OCT) } }
+                td { +message("text.OctalSize") }
+                td {
+                    style = textStyle
+                    code { +wrapper.toRadix(Radix.OCT, state.octSizeGroupWidth, state.octSizeDelimiter) }
+                }
             }
             tr {
                 td { +message("text.OctalCode") }
-                td { style = codeStyle; code { +wrapper.toLiteral(Radix.OCT) } }
+                td {
+                    style = codeStyle
+                    code { +wrapper.toLiteral(Radix.OCT, state.octCodeGroupWidth) }
+                }
             }
             tr {
-                td { +message("text.BinaryValue") }
-                td { style = textStyle; code { +wrapper.toRadix(Radix.BIN) } }
+                td { +message("text.BinarySize") }
+                td {
+                    style = textStyle
+                    code { +wrapper.toRadix(Radix.BIN, state.binSizeGroupWidth, state.binSizeDelimiter) }
+                }
             }
             tr {
                 td { +message("text.BinaryCode") }
-                td { style = codeStyle; code { +wrapper.toLiteral(Radix.BIN) } }
+                td {
+                    style = codeStyle
+                    code { +wrapper.toLiteral(Radix.BIN, state.binCodeGroupWidth) }
+                }
             }
         }
         .build()

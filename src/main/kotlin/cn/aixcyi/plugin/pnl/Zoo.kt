@@ -14,7 +14,9 @@ object Zoo {
      *
      * `<component name="NAME"></component>`
      */
-    object XmlComponent
+    object XmlComponent {
+        const val PNL = "PythonNumericLiteral"
+    }
 
     /** 文本资源包。 */
     private val BUNDLE = ResourceBundle.getBundle("messages.PythonNumericLiteral")

@@ -15,6 +15,14 @@
     </extensionPoints>
 
     <!-- 插件实现的扩展：https://plugins.jetbrains.com/docs/intellij/plugin-extensions.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable
+                parentId="tools"
+                id="HooTool.PNL.SettingsConfigurable"
+                instance="cn.aixcyi.plugin.pnl.ui.SettingsConfigurable"
+                key="configurable.Settings.display_name">
+        </applicationConfigurable>
+    </extensions>
     <extensions defaultExtensionNs="com.intellij.lang">
         <documentationProvider
                 language="Python"

@@ -2,6 +2,7 @@ package cn.aixcyi.plugin.pnl.utils
 
 import cn.aixcyi.plugin.pnl.Zoo.message
 import com.intellij.openapi.editor.colors.EditorColorsManager
+import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.jetbrains.python.PyTokenTypes
 import com.jetbrains.python.highlighting.PyHighlighter
 import com.jetbrains.python.psi.PyExpression
@@ -47,17 +48,31 @@ private constructor(private val expression: PyExpression, integer: BigInteger) {
     }
 
     private val wrapper = IntegerWrapper(integer)
-    private val numberColor: Color = EditorColorsManager.getInstance()
-        .schemeForCurrentUITheme
-        .getAttributes(PyHighlighter.PY_NUMBER)
-        .foregroundColor
+    private val scheme = EditorColorsManager.getInstance().schemeForCurrentUITheme
+    private val numberColor = getColor(PyHighlighter.PY_NUMBER)
+    private val operationColor = getColor(
+        PyHighlighter::class.java.getDeclaredField("PY_OPERATION_SIGN")
+            .apply { isAccessible = true }  // COMPATIBLE: 222.* 时是非 public 的
+            .get(null) as TextAttributesKey
+    )
+
+    private fun getColor(key: TextAttributesKey): Color? = scheme.getAttributes(key).foregroundColor
 
     fun buildMultiRadixTable() = MeowDocumentationBuilder.getInstance()
         .definition {
-            +expression.text
+            val regex = "^([-+~]*)([0-9A-Za-z]+)$".toRegex()
+            val result = regex.find(expression.text)!!
+            span {
+                style = operationColor.toHtmlStyleCodeRGB()
+                +result.groupValues[1]
+            }
+            span {
+                style = numberColor.toHtmlStyleCodeRGB()
+                +result.groupValues[2]
+            }
         }
         .contentTable {
-            val codeStyle = "text-align: right; color: ${numberColor.toHtmlRGB()};"
+            val codeStyle = "text-align: right; ${numberColor.toHtmlStyleCodeRGB()}"
             val textStyle = "text-align: right;"
             tr {
                 td { +message("text.Decimal") }

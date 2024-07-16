@@ -2,10 +2,14 @@ package cn.aixcyi.plugin.pnl.ui
 
 import cn.aixcyi.plugin.pnl.Zoo.message
 import cn.aixcyi.plugin.pnl.storage.PNLSettings
+import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.ColoredListCellRenderer
-import com.intellij.ui.components.JBTextField
+import com.intellij.ui.dsl.builder.bindItem
+import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.layout.ComboBoxPredicate
+import java.awt.Font
 import javax.swing.JList
 
 /**
@@ -15,48 +19,14 @@ import javax.swing.JList
  */
 class PNLSettingsComponent {
 
-    private lateinit var myHexCodeGroupWidth: ComboBox<Int?>
-    private lateinit var myDecCodeGroupWidth: ComboBox<Int?>
-    private lateinit var myOctCodeGroupWidth: ComboBox<Int?>
-    private lateinit var myBinCodeGroupWidth: ComboBox<Int?>
-    private lateinit var myHexSizeGroupWidth: ComboBox<Int?>
-    private lateinit var myDecSizeGroupWidth: ComboBox<Int?>
-    private lateinit var myOctSizeGroupWidth: ComboBox<Int?>
-    private lateinit var myBinSizeGroupWidth: ComboBox<Int?>
-    private lateinit var myHexSizeDelimiter: JBTextField
-    private lateinit var myDecSizeDelimiter: JBTextField
-    private lateinit var myOctSizeDelimiter: JBTextField
-    private lateinit var myBinSizeDelimiter: JBTextField
+    companion object {
+        private val GW_OPTIONS_HEX = listOf(null, 2, 4)
+        private val GW_OPTIONS_DEC = listOf(null, 3, 4)
+        private val GW_OPTIONS_OCT = listOf(null, 2, 3, 4)
+        private val GW_OPTIONS_BIN = listOf(null, 4, 8, 16)
+    }
 
-    var state
-        get() = PNLSettings.State().apply {
-            hexCodeGroupWidth = myHexCodeGroupWidth.item
-            decCodeGroupWidth = myDecCodeGroupWidth.item
-            octCodeGroupWidth = myOctCodeGroupWidth.item
-            binCodeGroupWidth = myBinCodeGroupWidth.item
-            hexSizeGroupWidth = myHexSizeGroupWidth.item
-            decSizeGroupWidth = myDecSizeGroupWidth.item
-            octSizeGroupWidth = myOctSizeGroupWidth.item
-            binSizeGroupWidth = myBinSizeGroupWidth.item
-            hexSizeDelimiter = myHexSizeDelimiter.text
-            decSizeDelimiter = myDecSizeDelimiter.text
-            octSizeDelimiter = myOctSizeDelimiter.text
-            binSizeDelimiter = myBinSizeDelimiter.text
-        }
-        set(state) {
-            myHexCodeGroupWidth.item = state.hexCodeGroupWidth
-            myDecCodeGroupWidth.item = state.decCodeGroupWidth
-            myOctCodeGroupWidth.item = state.octCodeGroupWidth
-            myBinCodeGroupWidth.item = state.binCodeGroupWidth
-            myHexSizeGroupWidth.item = state.hexSizeGroupWidth
-            myDecSizeGroupWidth.item = state.decSizeGroupWidth
-            myOctSizeGroupWidth.item = state.octSizeGroupWidth
-            myBinSizeGroupWidth.item = state.binSizeGroupWidth
-            myHexSizeDelimiter.text = state.hexSizeDelimiter
-            myDecSizeDelimiter.text = state.decSizeDelimiter
-            myOctSizeDelimiter.text = state.octSizeDelimiter
-            myBinSizeDelimiter.text = state.binSizeDelimiter
-        }
+    private lateinit var myDecSizeGroupWidth: ComboBox<Int?>
 
     private val myRenderer = object : ColoredListCellRenderer<Int?>() {
         override fun customizeCellRenderer(
@@ -66,42 +36,75 @@ class PNLSettingsComponent {
         }
     }
 
-    private val myMainPanel = panel {
+    private val editorFont: Font = run {
+        val preferences = EditorColorsManager.getInstance().schemeForCurrentUITheme.fontPreferences
+        val fontFamily = preferences.fontFamily
+        Font(fontFamily, Font.PLAIN, preferences.getSize(fontFamily))
+    }
+
+    val state = PNLSettings.getInstance().state
+
+    val panel = panel {
         group(message("label.LiteralGroupingSetting.text")) {
             row(message("label.Hexadecimal.text")) {
-                comboBox(listOf(null, 2, 4), myRenderer).apply { myHexCodeGroupWidth = component }
+                comboBox(GW_OPTIONS_HEX, myRenderer)
+                    .bindItem(state::hexCodeGroupWidth)
             }
             row(message("label.Decimal.text")) {
-                comboBox(listOf(null, 3, 4), myRenderer).apply { myDecCodeGroupWidth = component }
+                comboBox(GW_OPTIONS_DEC, myRenderer)
+                    .bindItem(state::decCodeGroupWidth)
             }
             row(message("label.Octal.text")) {
-                comboBox(listOf(null, 2, 3, 4), myRenderer).apply { myOctCodeGroupWidth = component }
+                comboBox(GW_OPTIONS_OCT, myRenderer)
+                    .bindItem(state::octCodeGroupWidth)
             }
             row(message("label.Binary.text")) {
-                comboBox(listOf(null, 4, 8, 16), myRenderer).apply { myBinCodeGroupWidth = component }
+                comboBox(GW_OPTIONS_BIN, myRenderer)
+                    .bindItem(state::binCodeGroupWidth)
             }
         }
         group(message("label.SizeGroupingSetting.text")) {
             row(message("label.Hexadecimal.text")) {
-                comboBox(listOf(null, 2, 4), myRenderer).apply { myHexSizeGroupWidth = component }
-                textField().apply { myHexSizeDelimiter = component }
+                var box: ComboBox<Int?>
+                comboBox(GW_OPTIONS_HEX, myRenderer)
+                    .bindItem(state::hexSizeGroupWidth)
+                    .apply { box = component }
+                textField()
+                    .bindText(state::hexSizeDelimiter)
+                    .applyToComponent { font = editorFont }
+                    .enabledIf(ComboBoxPredicate(box) { it != null })
             }
             row(message("label.Decimal.text")) {
-                comboBox(listOf(null, 3, 4), myRenderer).apply { myDecSizeGroupWidth = component }
-                textField().apply { myDecSizeDelimiter = component }
+                comboBox(GW_OPTIONS_DEC, myRenderer)
+                    .bindItem(state::decSizeGroupWidth)
+                    .apply { myDecSizeGroupWidth = component }
+                textField()
+                    .bindText(state::decSizeDelimiter)
+                    .applyToComponent { font = editorFont }
+                    .enabledIf(ComboBoxPredicate(myDecSizeGroupWidth) { it != null })
             }
             row(message("label.Octal.text")) {
-                comboBox(listOf(null, 2, 3, 4), myRenderer).apply { myOctSizeGroupWidth = component }
-                textField().apply { myOctSizeDelimiter = component }
+                var box: ComboBox<Int?>
+                comboBox(GW_OPTIONS_OCT, myRenderer)
+                    .bindItem(state::octSizeGroupWidth)
+                    .apply { box = component }
+                textField()
+                    .bindText(state::octSizeDelimiter)
+                    .applyToComponent { font = editorFont }
+                    .enabledIf(ComboBoxPredicate(box) { it != null })
             }
             row(message("label.Binary.text")) {
-                comboBox(listOf(null, 4, 8, 16), myRenderer).apply { myBinSizeGroupWidth = component }
-                textField().apply { myBinSizeDelimiter = component }
+                var box: ComboBox<Int?>
+                comboBox(GW_OPTIONS_BIN, myRenderer)
+                    .bindItem(state::binSizeGroupWidth)
+                    .apply { box = component }
+                textField()
+                    .bindText(state::binSizeDelimiter)
+                    .applyToComponent { font = editorFont }
+                    .enabledIf(ComboBoxPredicate(box) { it != null })
             }
         }
     }
 
-    fun getPanel() = myMainPanel
-
-    fun getPreferredFocusedComponent() = myDecCodeGroupWidth
+    val preferredFocusedComponent = myDecSizeGroupWidth
 }

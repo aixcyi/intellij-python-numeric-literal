@@ -22,27 +22,26 @@ class PNLSettingsConfigurable : SearchableConfigurable {
 
     override fun getDisplayName() = message("configurable.Settings.display_name")
 
-    override fun getPreferredFocusedComponent(): JComponent? = myComponent?.getPreferredFocusedComponent()
+    override fun getPreferredFocusedComponent(): JComponent? = myComponent?.preferredFocusedComponent
 
     override fun createComponent(): JComponent {
         myComponent = PNLSettingsComponent()
-        return myComponent!!.getPanel()
+        return myComponent!!.panel
     }
 
     override fun isModified(): Boolean {
-        return PNLSettings.getInstance().state != myComponent?.state
+        return myComponent?.panel?.isModified() ?: false
     }
 
     override fun apply() {
         if (myComponent == null)
             return
+        myComponent!!.panel.apply()
         PNLSettings.getInstance().loadState(myComponent!!.state)
     }
 
     override fun reset() {
-        if (myComponent == null)
-            return
-        myComponent!!.state = PNLSettings.getInstance().state
+        myComponent?.panel?.reset()
     }
 
     override fun disposeUIResources() {

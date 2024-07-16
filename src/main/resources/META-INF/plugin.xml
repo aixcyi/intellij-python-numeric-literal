@@ -16,10 +16,11 @@
 
     <!-- 插件实现的扩展：https://plugins.jetbrains.com/docs/intellij/plugin-extensions.html -->
     <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="cn.aixcyi.plugin.pnl.storage.PNLSettings"/>
         <applicationConfigurable
                 parentId="tools"
                 id="HooTool.PNL.SettingsConfigurable"
-                instance="cn.aixcyi.plugin.pnl.ui.SettingsConfigurable"
+                instance="cn.aixcyi.plugin.pnl.ui.PNLSettingsConfigurable"
                 key="configurable.Settings.display_name">
         </applicationConfigurable>
     </extensions>

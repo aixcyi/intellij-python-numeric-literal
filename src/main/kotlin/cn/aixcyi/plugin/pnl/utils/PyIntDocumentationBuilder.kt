@@ -87,66 +87,82 @@ private constructor(private val expression: PyExpression, integer: BigInteger) {
             tr {
                 td { +message("text.DecimalSize") }
                 td {
-                    style = if (decCode != decSize) textStyle else codeStyle
-                    code { +decSize }
+                    pre {
+                        style = if (decCode != decSize) textStyle else codeStyle
+                        +decSize
+                    }
                 }
             }
             if (decCode != decSize)
                 tr {
                     td { +message("text.DecimalCode") }
                     td {
-                        style = codeStyle
-                        code { +decCode }
+                        pre {
+                            style = codeStyle
+                            +decCode
+                        }
                     }
                 }
             tr {
                 td { +message("text.HexadecimalSize") }
                 td {
-                    style = textStyle
-                    code { +hexSizeUpper }
-                    if (hexSizeUpper != hexSizeLower) {
-                        br()
-                        code { +hexSizeLower }
+                    pre {
+                        style = textStyle
+                        +hexSizeUpper
+                        if (hexSizeUpper != hexSizeLower) {
+                            br()
+                            +hexSizeLower
+                        }
                     }
                 }
             }
             tr {
                 td { +message("text.HexadecimalCode") }
                 td {
-                    style = codeStyle
-                    code { +hexCodeUpper }
-                    if (hexCodeUpper != hexCodeLower) {
-                        br()
-                        code { +hexCodeLower }
+                    pre {
+                        style = codeStyle
+                        +hexCodeUpper
+                        if (hexCodeUpper != hexCodeLower) {
+                            br()
+                            +hexCodeLower
+                        }
                     }
                 }
             }
             tr {
                 td { +message("text.OctalSize") }
                 td {
-                    style = textStyle
-                    code { +wrapper.toRadix(Radix.OCT, state.octSizeGroupWidth, state.octSizeDelimiter) }
+                    pre {
+                        style = textStyle
+                        +wrapper.toRadix(Radix.OCT, state.octSizeGroupWidth, state.octSizeDelimiter)
+                    }
                 }
             }
             tr {
                 td { +message("text.OctalCode") }
                 td {
-                    style = codeStyle
-                    code { +wrapper.toLiteral(Radix.OCT, state.octCodeGroupWidth) }
+                    pre {
+                        style = codeStyle
+                        +wrapper.toLiteral(Radix.OCT, state.octCodeGroupWidth)
+                    }
                 }
             }
             tr {
                 td { +message("text.BinarySize") }
                 td {
-                    style = textStyle
-                    code { +wrapper.toRadix(Radix.BIN, state.binSizeGroupWidth, state.binSizeDelimiter) }
+                    pre {
+                        style = textStyle
+                        +wrapper.toRadix(Radix.BIN, state.binSizeGroupWidth, state.binSizeDelimiter)
+                    }
                 }
             }
             tr {
                 td { +message("text.BinaryCode") }
                 td {
-                    style = codeStyle
-                    code { +wrapper.toLiteral(Radix.BIN, state.binCodeGroupWidth) }
+                    pre {
+                        style = codeStyle
+                        +wrapper.toLiteral(Radix.BIN, state.binCodeGroupWidth)
+                    }
                 }
             }
         }

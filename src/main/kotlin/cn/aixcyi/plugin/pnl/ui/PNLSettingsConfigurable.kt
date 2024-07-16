@@ -38,6 +38,7 @@ class PNLSettingsConfigurable : SearchableConfigurable {
             return
         myComponent!!.panel.apply()
         PNLSettings.getInstance().loadState(myComponent!!.state)
+        // TODO: 退出程序后会还原回去
     }
 
     override fun reset() {

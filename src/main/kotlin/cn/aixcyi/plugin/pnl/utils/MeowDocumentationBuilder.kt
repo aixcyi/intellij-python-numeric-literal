@@ -60,7 +60,7 @@ class MeowDocumentationBuilder private constructor() {
     }
 
     fun build() = buildString {
-        appendHTML().html {
+        appendHTML(prettyPrint = false, xhtmlCompatible = false).html {
             body {
                 for (block in blocks)
                     block()

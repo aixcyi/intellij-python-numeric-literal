@@ -35,4 +35,13 @@ class PyNumDocumentationProvider : AbstractDocumentationProvider() {
         // 小数、虚数不作处理
         return null
     }
+
+    override fun getQuickNavigateInfo(element: PsiElement?, originalElement: PsiElement?): String? {
+        if (element !is PyNumericLiteralExpression)
+            return null
+        if (element.isIntegerLiteral)
+            return PyIntDocumentationBuilder.getInstance(element)?.buildBitView()
+        // 小数、虚数不作处理
+        return null
+    }
 }

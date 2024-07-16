@@ -12,6 +12,7 @@ import com.jetbrains.python.psi.PyPrefixExpression
 import kotlinx.html.*
 import java.awt.Color
 import java.math.BigInteger
+import kotlin.math.max
 
 /**
  * Python 整数字面值文档构建器。
@@ -19,7 +20,7 @@ import java.math.BigInteger
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  */
 class PyIntDocumentationBuilder
-private constructor(private val expression: PyExpression, integer: BigInteger) {
+private constructor(expression: PyExpression, integer: BigInteger) {
 
     companion object {
         @JvmStatic
@@ -57,20 +58,26 @@ private constructor(private val expression: PyExpression, integer: BigInteger) {
             .apply { isAccessible = true }  // COMPATIBLE: 222.* 时是非 public 的
             .get(null) as TextAttributesKey
     )
+    private val literal = run {  // "-2077" -> Pair("-", "2077")
+        val regex = "^([-+~]*)([0-9A-Za-z]+)$".toRegex()
+        val result = regex.find(expression.text)!!
+        object {
+            val symbols = result.groupValues[1]
+            val digits = result.groupValues[2]
+        }
+    }
 
     private fun getColor(key: TextAttributesKey): Color? = scheme.getAttributes(key).foregroundColor
 
     fun buildMultiRadixTable() = MeowDocumentationBuilder.getInstance()
         .definition {
-            val regex = "^([-+~]*)([0-9A-Za-z]+)$".toRegex()
-            val result = regex.find(expression.text)!!
             span {
                 style = operationColor.toHtmlStyleCodeRGB()
-                +result.groupValues[1]
+                +literal.symbols
             }
             span {
                 style = numberColor.toHtmlStyleCodeRGB()
-                +result.groupValues[2]
+                +literal.digits
             }
         }
         .contentTable {
@@ -163,6 +170,23 @@ private constructor(private val expression: PyExpression, integer: BigInteger) {
                         style = codeStyle
                         +wrapper.toLiteral(Radix.BIN, state.binCodeGroupWidth)
                     }
+                }
+            }
+        }
+        .build()
+
+    fun buildBitView() = MeowDocumentationBuilder.getInstance()
+        .content {
+            // TODO: 实现负数补码，并允许设置
+            val bitLen = max(32, wrapper.integer.bitLength().nextHighestOneBit())
+            val highBit = "<span style=\"${numberColor.toHtmlStyleCodeRGB()}\">1</span>"
+            val snippet = wrapper.toBitGroups(4, bitLen)
+                .chunked(4)
+                .joinToString(separator = "\n") { it.joinToString(separator = " ") }
+                .replace("1", highBit)
+            pre {
+                unsafe {
+                    raw(snippet)
                 }
             }
         }

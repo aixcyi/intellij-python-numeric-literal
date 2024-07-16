@@ -39,6 +39,7 @@ class IntegerWrapper(private val integer: BigInteger) {
         val body = integer.abs().toString(r.radix)
             .reversed()
             .chunked(width)
+            .reversed()
             .joinToString(delimiter) { it.reversed() }
             .uppercase()
         return if (isNegative) "-$body" else body
@@ -58,7 +59,7 @@ class IntegerWrapper(private val integer: BigInteger) {
         if (transform != null)
             body = body.transform()
         if (width != null && width > 0)
-            body = body.reversed().chunked(width).joinToString("_") { it.reversed() }
+            body = body.reversed().chunked(width).reversed().joinToString("_") { it.reversed() }
         return "$prefix$body"
     }
 }

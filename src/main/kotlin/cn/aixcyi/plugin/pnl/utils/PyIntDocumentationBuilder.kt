@@ -88,7 +88,7 @@ private constructor(private val expression: PyExpression, integer: BigInteger) {
                 td { +message("text.DecimalSize") }
                 td {
                     style = if (decCode != decSize) textStyle else codeStyle
-                    code { +decCode }
+                    code { +decSize }
                 }
             }
             if (decCode != decSize)

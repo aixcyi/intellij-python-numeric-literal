@@ -60,12 +60,15 @@ class PNLSettingsComponent {
     val panel = panel {
         group(message("separator.BitViewSetting.text")) {
             row(message("label.BitViewMode.text")) {
+                visible(false)  // TODO: 解决 SegmentedButton 绑定问题前暂时屏蔽该设置
                 segmentedButton(listOf(false, true)) {
                     this.text =
                         if (it) message("button.DisplaySignedInteger.text")
                         else message("button.DisplayUnsignedInteger.text")
                 }.whenItemSelectedFromUi {
                     state.viewUnsigned = it
+                }.apply {
+                    selectedItem = state.viewUnsigned
                 }
             }
             row(message("label.MinBitDepth.text")) {

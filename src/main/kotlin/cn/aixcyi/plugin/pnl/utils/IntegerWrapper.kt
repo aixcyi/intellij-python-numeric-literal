@@ -76,19 +76,15 @@ class IntegerWrapper(val integer: BigInteger) {
      *
      * @param groupWidth 分组宽度。每一组容纳几个比特。一般是 `4`。
      * @param bitLength 总比特数。在实际比特数不够时使用 `0` 填充到这个长度。必须是 [groupWidth] 的正整数倍。
-     * @param groupsLimit 组数限制。
      */
-    fun toBitGroups(groupWidth: Int, bitLength: Int, groupsLimit: Int? = null) =
+    fun toBitGroups(groupWidth: Int, bitLength: Int) =
         integer
-            .abs()
-            .toString(Radix.BIN.radix)
-            .padStart(padChar = '0', length = (ceil(bitLength.toDouble() / groupWidth) * groupWidth).toInt())
+            .toByteArray()
+            .joinToString("") { it.toUByte().toString(2).padStart(8, '0') }
+            .padStart(
+                length = (ceil(bitLength.toDouble() / groupWidth) * groupWidth).toInt(),
+                padChar = if (isNegative) '1' else '0',
+            )
             .chunked(groupWidth)
             .toMutableList()
-            .let {
-                if (groupsLimit == null)
-                    it
-                else
-                    it.subList(it.size - groupsLimit, it.size)
-            }
 }

@@ -177,11 +177,10 @@ private constructor(expression: PyExpression, integer: BigInteger) {
 
     fun buildBitView() = MeowDocumentationBuilder.getInstance()
         .content {
-            // TODO: 实现负数补码，并允许设置
-            val bitLen = max(32, wrapper.integer.bitLength().nextHighestOneBit())
+            val bitDepth = max(state.bitDepth, wrapper.integer.bitLength().nextHighestOneBit())
             val highBit = "<span style=\"${numberColor.toHtmlStyleCodeRGB()}\">1</span>"
-            val snippet = wrapper.toBitGroups(4, bitLen)
-                .chunked(4)
+            val snippet = wrapper.toBitGroups(4, bitDepth)
+                .chunked(if (bitDepth > 64) 8 else 4)
                 .joinToString(separator = "\n") { it.joinToString(separator = " ") }
                 .replace("1", highBit)
             pre {

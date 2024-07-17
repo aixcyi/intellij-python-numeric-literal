@@ -1,6 +1,7 @@
 package cn.aixcyi.plugin.pnl.storage
 
 import cn.aixcyi.plugin.pnl.Zoo
+import cn.aixcyi.plugin.pnl.ui.PNLSettingsComponent
 import com.intellij.openapi.components.*
 
 /**
@@ -16,7 +17,13 @@ class PNLSettings : SimplePersistentStateComponent<PNLSettings.State>(State()) {
         fun getInstance() = service<PNLSettings>()
     }
 
+    /**
+     * @see [PNLSettingsComponent.Companion]
+     */
     class State : BaseState() {
+        // Ctrl-Hover 设置
+        var bitDepth: Int = 32
+
         // 字面值
         var hexCodeGroupWidth: Int? = null
         var decCodeGroupWidth: Int? = null

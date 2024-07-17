@@ -5,9 +5,11 @@ import cn.aixcyi.plugin.pnl.storage.PNLSettings
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.ColoredListCellRenderer
+import com.intellij.ui.SimpleTextAttributes
 import com.intellij.ui.dsl.builder.bindItem
 import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.toNullableProperty
 import com.intellij.ui.layout.ComboBoxPredicate
 import java.awt.Font
 import javax.swing.JList
@@ -20,10 +22,12 @@ import javax.swing.JList
 class PNLSettingsComponent {
 
     companion object {
-        private val GW_OPTIONS_HEX = listOf(null, 2, 4)
-        private val GW_OPTIONS_DEC = listOf(null, 3, 4)
-        private val GW_OPTIONS_OCT = listOf(null, 2, 3, 4)
-        private val GW_OPTIONS_BIN = listOf(null, 4, 8, 16)
+        private val OPTIONS_DEPTHS = mapOf(8 to "byte", 16 to "short", 32 to "int", 64 to "long", 128 to "long long")
+        private val OPTIONS_DEPTHS_ = mapOf(8 to "BYTE", 16 to "WORD", 32 to "DWORD", 64 to "QWORD", 128 to "")
+        private val OPTIONS_GW_HEX = listOf(null, 2, 4)
+        private val OPTIONS_GW_DEC = listOf(null, 3, 4)
+        private val OPTIONS_GW_OCT = listOf(null, 2, 3, 4)
+        private val OPTIONS_GW_BIN = listOf(null, 4, 8, 16)
     }
 
     private lateinit var myDecSizeGroupWidth: ComboBox<Int?>
@@ -33,6 +37,15 @@ class PNLSettingsComponent {
             list: JList<out Int?>, value: Int?, index: Int, selected: Boolean, hasFocus: Boolean
         ) {
             this.append(value?.toString() ?: message("label.DisableDigitGrouping.text"))
+        }
+    }
+    private val myBitDepthRenderer = object : ColoredListCellRenderer<Int>() {
+        override fun customizeCellRenderer(
+            list: JList<out Int>, value: Int, index: Int, selected: Boolean, hasFocus: Boolean
+        ) {
+            this.append("$value", SimpleTextAttributes.REGULAR_ATTRIBUTES)
+            this.append(" - ${OPTIONS_DEPTHS[value]}", SimpleTextAttributes.REGULAR_ATTRIBUTES)
+            this.append("　${OPTIONS_DEPTHS_[value]!!}", SimpleTextAttributes.GRAYED_ATTRIBUTES)
         }
     }
 
@@ -45,28 +58,34 @@ class PNLSettingsComponent {
     val state = PNLSettings.getInstance().state
 
     val panel = panel {
-        group(message("label.LiteralGroupingSetting.text")) {
+        group(message("separator.BitViewSetting.text")) {
+            row(message("label.MinBitDepth.text")) {
+                comboBox(OPTIONS_DEPTHS.keys, myBitDepthRenderer)
+                    .bindItem(state::bitDepth.toNullableProperty())
+            }
+        }
+        group(message("separator.LiteralGroupingSetting.text")) {
             row(message("label.Hexadecimal.text")) {
-                comboBox(GW_OPTIONS_HEX, myRenderer)
+                comboBox(OPTIONS_GW_HEX, myRenderer)
                     .bindItem(state::hexCodeGroupWidth)
             }
             row(message("label.Decimal.text")) {
-                comboBox(GW_OPTIONS_DEC, myRenderer)
+                comboBox(OPTIONS_GW_DEC, myRenderer)
                     .bindItem(state::decCodeGroupWidth)
             }
             row(message("label.Octal.text")) {
-                comboBox(GW_OPTIONS_OCT, myRenderer)
+                comboBox(OPTIONS_GW_OCT, myRenderer)
                     .bindItem(state::octCodeGroupWidth)
             }
             row(message("label.Binary.text")) {
-                comboBox(GW_OPTIONS_BIN, myRenderer)
+                comboBox(OPTIONS_GW_BIN, myRenderer)
                     .bindItem(state::binCodeGroupWidth)
             }
         }
-        group(message("label.SizeGroupingSetting.text")) {
+        group(message("separator.SizeGroupingSetting.text")) {
             row(message("label.Hexadecimal.text")) {
                 var box: ComboBox<Int?>
-                comboBox(GW_OPTIONS_HEX, myRenderer)
+                comboBox(OPTIONS_GW_HEX, myRenderer)
                     .bindItem(state::hexSizeGroupWidth)
                     .apply { box = component }
                 textField()
@@ -75,7 +94,7 @@ class PNLSettingsComponent {
                     .enabledIf(ComboBoxPredicate(box) { it != null })
             }
             row(message("label.Decimal.text")) {
-                comboBox(GW_OPTIONS_DEC, myRenderer)
+                comboBox(OPTIONS_GW_DEC, myRenderer)
                     .bindItem(state::decSizeGroupWidth)
                     .apply { myDecSizeGroupWidth = component }
                 textField()
@@ -85,7 +104,7 @@ class PNLSettingsComponent {
             }
             row(message("label.Octal.text")) {
                 var box: ComboBox<Int?>
-                comboBox(GW_OPTIONS_OCT, myRenderer)
+                comboBox(OPTIONS_GW_OCT, myRenderer)
                     .bindItem(state::octSizeGroupWidth)
                     .apply { box = component }
                 textField()
@@ -95,7 +114,7 @@ class PNLSettingsComponent {
             }
             row(message("label.Binary.text")) {
                 var box: ComboBox<Int?>
-                comboBox(GW_OPTIONS_BIN, myRenderer)
+                comboBox(OPTIONS_GW_BIN, myRenderer)
                     .bindItem(state::binSizeGroupWidth)
                     .apply { box = component }
                 textField()

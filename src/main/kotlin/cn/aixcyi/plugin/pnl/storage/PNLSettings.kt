@@ -22,23 +22,23 @@ class PNLSettings : SimplePersistentStateComponent<PNLSettings.State>(State()) {
      */
     class State : BaseState() {
         // Ctrl-Hover 设置
-        var viewBitDepth: Int = 32
-        var viewUnsigned: Boolean = false
+        var viewBitDepth by property(32)
+        var viewUnsigned by property(false)
 
         // 字面值
-        var hexCodeGroupWidth: Int? = null
-        var decCodeGroupWidth: Int? = null
-        var octCodeGroupWidth: Int? = null
-        var binCodeGroupWidth: Int? = null
+        var hexCodeGroupWidth by property<Int?>(null) { it == null }
+        var decCodeGroupWidth by property<Int?>(null) { it == null }
+        var octCodeGroupWidth by property<Int?>(null) { it == null }
+        var binCodeGroupWidth by property<Int?>(null) { it == null }
 
         // 数值
-        var hexSizeGroupWidth: Int? = null
-        var decSizeGroupWidth: Int? = null
-        var octSizeGroupWidth: Int? = null
-        var binSizeGroupWidth: Int? = null
-        var hexSizeDelimiter: String = ""
-        var decSizeDelimiter: String = ""
-        var octSizeDelimiter: String = ""
-        var binSizeDelimiter: String = ""
+        var hexSizeGroupWidth by property<Int?>(null) { it == null }
+        var decSizeGroupWidth by property<Int?>(null) { it == null }
+        var octSizeGroupWidth by property<Int?>(null) { it == null }
+        var binSizeGroupWidth by property<Int?>(null) { it == null }
+        var hexSizeDelimiter by property("") { it == "" }
+        var decSizeDelimiter by property("") { it == "" }
+        var octSizeDelimiter by property("") { it == "" }
+        var binSizeDelimiter by property("") { it == "" }
     }
 }

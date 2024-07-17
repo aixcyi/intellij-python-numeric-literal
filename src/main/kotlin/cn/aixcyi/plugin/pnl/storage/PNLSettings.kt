@@ -22,7 +22,8 @@ class PNLSettings : SimplePersistentStateComponent<PNLSettings.State>(State()) {
      */
     class State : BaseState() {
         // Ctrl-Hover 设置
-        var bitDepth: Int = 32
+        var viewBitDepth: Int = 32
+        var viewUnsigned: Boolean = false
 
         // 字面值
         var hexCodeGroupWidth: Int? = null

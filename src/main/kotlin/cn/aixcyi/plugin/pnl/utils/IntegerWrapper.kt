@@ -65,13 +65,16 @@ class IntegerWrapper(private val integer: BigInteger) {
     }
 
     /**
-     * 将 **有符号整数** 转换为二进制补码。
-     *
-     * 比如 `127` 表示为 `0111 1111`，`128` 表示为 `0000 0000 1000 0000`。
+     * 转换为二进制码。
      *
      * @param depth 最低位深度。不足时优先填充到这个长度，然后按照 `8`、`16`、`32`、`64`…… 的规律递增。
+     * @param unsigned `false` 会将 **负整数** 转换为二进制补码，而 `true` 会将 **绝对值** 转换为二进制码。
      */
-    fun toTwoComplement(depth: Int? = null) = integer
+    fun toBits(depth: Int? = null, unsigned: Boolean = false) = integer
+        .let {
+            if (unsigned) it.abs()
+            else it
+        }
         .toByteArray()
         .joinToString("") { it.toUByte().toString(2).padStart(8, '0') }
         .run {

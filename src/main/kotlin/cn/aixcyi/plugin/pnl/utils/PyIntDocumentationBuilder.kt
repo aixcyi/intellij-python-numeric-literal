@@ -176,7 +176,7 @@ private constructor(expression: PyExpression, integer: BigInteger) {
 
     fun buildBitView() = MeowDocumentationBuilder.getInstance()
         .content {
-            val bits = wrapper.toTwoComplement(state.bitDepth)
+            val bits = wrapper.toBits(state.viewBitDepth, state.viewUnsigned)
             val snippet = bits
                 .chunked(4)
                 .chunked(if (bits.length > 64) 8 else 4)

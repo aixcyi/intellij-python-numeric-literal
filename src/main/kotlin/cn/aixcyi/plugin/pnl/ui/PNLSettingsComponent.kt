@@ -59,9 +59,18 @@ class PNLSettingsComponent {
 
     val panel = panel {
         group(message("separator.BitViewSetting.text")) {
+            row(message("label.BitViewMode.text")) {
+                segmentedButton(listOf(false, true)) {
+                    this.text =
+                        if (it) message("button.DisplaySignedInteger.text")
+                        else message("button.DisplayUnsignedInteger.text")
+                }.whenItemSelectedFromUi {
+                    state.viewUnsigned = it
+                }
+            }
             row(message("label.MinBitDepth.text")) {
                 comboBox(OPTIONS_DEPTHS.keys, myBitDepthRenderer)
-                    .bindItem(state::bitDepth.toNullableProperty())
+                    .bindItem(state::viewBitDepth.toNullableProperty())
             }
         }
         group(message("separator.LiteralGroupingSetting.text")) {

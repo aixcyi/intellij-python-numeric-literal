@@ -12,7 +12,6 @@ import com.jetbrains.python.psi.PyPrefixExpression
 import kotlinx.html.*
 import java.awt.Color
 import java.math.BigInteger
-import kotlin.math.max
 
 /**
  * Python 整数字面值文档构建器。
@@ -177,12 +176,12 @@ private constructor(expression: PyExpression, integer: BigInteger) {
 
     fun buildBitView() = MeowDocumentationBuilder.getInstance()
         .content {
-            val bitDepth = max(state.bitDepth, wrapper.integer.bitLength().nextHighestOneBit())
-            val highBit = "<span style=\"${numberColor.toHtmlStyleCodeRGB()}\">1</span>"
-            val snippet = wrapper.toBitGroups(4, bitDepth)
-                .chunked(if (bitDepth > 64) 8 else 4)
+            val bits = wrapper.toTwoComplement(state.bitDepth)
+            val snippet = bits
+                .chunked(4)
+                .chunked(if (bits.length > 64) 8 else 4)
                 .joinToString(separator = "\n") { it.joinToString(separator = " ") }
-                .replace("1", highBit)
+                .replace("1", "<span style=\"${numberColor.toHtmlStyleCodeRGB()}\">1</span>")
             pre {
                 unsafe {
                     raw(snippet)

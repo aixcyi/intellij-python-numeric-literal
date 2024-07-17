@@ -1,7 +1,7 @@
 package cn.aixcyi.plugin.pnl.utils
 
 import java.math.BigInteger
-import kotlin.math.ceil
+import kotlin.math.max
 
 /**
  * 常见的进位制。
@@ -21,7 +21,7 @@ enum class Radix(val radix: Int, val prefix: String) {
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  * @see [Radix]
  */
-class IntegerWrapper(val integer: BigInteger) {
+class IntegerWrapper(private val integer: BigInteger) {
 
     private val isNegative = integer.signum() < 0
 
@@ -65,26 +65,19 @@ class IntegerWrapper(val integer: BigInteger) {
     }
 
     /**
-     * 将整数转换为多组比特。
+     * 将 **有符号整数** 转换为二进制补码。
      *
-     * 它用于实现类似以下的视图，比如 `2077` ：
+     * 比如 `127` 表示为 `0111 1111`，`128` 表示为 `0000 0000 1000 0000`。
      *
-     * ```
-     * 0000 0000 0000 0000
-     * 0000 1000 0001 1101
-     * ```
-     *
-     * @param groupWidth 分组宽度。每一组容纳几个比特。一般是 `4`。
-     * @param bitLength 总比特数。在实际比特数不够时使用 `0` 填充到这个长度。必须是 [groupWidth] 的正整数倍。
+     * @param depth 最低位深度。不足时优先填充到这个长度，然后按照 `8`、`16`、`32`、`64`…… 的规律递增。
      */
-    fun toBitGroups(groupWidth: Int, bitLength: Int) =
-        integer
-            .toByteArray()
-            .joinToString("") { it.toUByte().toString(2).padStart(8, '0') }
-            .padStart(
-                length = (ceil(bitLength.toDouble() / groupWidth) * groupWidth).toInt(),
+    fun toTwoComplement(depth: Int? = null) = integer
+        .toByteArray()
+        .joinToString("") { it.toUByte().toString(2).padStart(8, '0') }
+        .run {
+            padStart(
+                length = max(this.length, depth ?: 0).nextHighestOneBit(),
                 padChar = if (isNegative) '1' else '0',
             )
-            .chunked(groupWidth)
-            .toMutableList()
+        }
 }

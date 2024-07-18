@@ -19,3 +19,12 @@ fun Int.nextHighestOneBit(): Int {
         return this
     return mid shl 1
 }
+
+operator fun List<UInt>.compareTo(another: List<UInt>): Int {
+    for ((a, b) in this.zip(another)) {
+        val cmp = a.compareTo(b)
+        if (cmp != 0)
+            return cmp
+    }
+    return this.size.compareTo(another.size)
+}

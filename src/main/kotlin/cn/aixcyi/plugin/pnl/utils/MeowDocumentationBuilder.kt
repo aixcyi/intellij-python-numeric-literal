@@ -68,3 +68,16 @@ class MeowDocumentationBuilder private constructor() {
         }
     }
 }
+
+/**
+ * 根据 IDE 版本选择构建 `<code></code>` 或者 `<pre></pre>` 。
+ *
+ * @see [AppInfo.isSupportPreformattedTag]
+ */
+fun FlowOrPhrasingContent.snippet(classes: String? = null, block: HtmlBlockInlineTag.() -> Unit) {
+    val appInfo = AppInfo.getInstance()
+    if (appInfo.isSupportPreformattedTag())
+        (this as FlowContent).pre(classes, block)
+    else
+        code(classes, block)
+}

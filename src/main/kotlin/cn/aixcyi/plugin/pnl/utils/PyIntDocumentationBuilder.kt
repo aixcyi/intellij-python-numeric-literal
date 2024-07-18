@@ -93,7 +93,7 @@ private constructor(expression: PyExpression, integer: BigInteger) {
             tr {
                 td { +message("text.DecimalSize") }
                 td {
-                    pre {
+                    snippet {
                         style = if (decCode != decSize) textStyle else codeStyle
                         +decSize
                     }
@@ -103,7 +103,7 @@ private constructor(expression: PyExpression, integer: BigInteger) {
                 tr {
                     td { +message("text.DecimalCode") }
                     td {
-                        pre {
+                        snippet {
                             style = codeStyle
                             +decCode
                         }
@@ -112,7 +112,7 @@ private constructor(expression: PyExpression, integer: BigInteger) {
             tr {
                 td { +message("text.HexadecimalSize") }
                 td {
-                    pre {
+                    snippet {
                         style = textStyle
                         +hexSizeUpper
                         if (hexSizeUpper != hexSizeLower) {
@@ -125,7 +125,7 @@ private constructor(expression: PyExpression, integer: BigInteger) {
             tr {
                 td { +message("text.HexadecimalCode") }
                 td {
-                    pre {
+                    snippet {
                         style = codeStyle
                         +hexCodeUpper
                         if (hexCodeUpper != hexCodeLower) {
@@ -138,7 +138,7 @@ private constructor(expression: PyExpression, integer: BigInteger) {
             tr {
                 td { +message("text.OctalSize") }
                 td {
-                    pre {
+                    snippet {
                         style = textStyle
                         +wrapper.toRadix(Radix.OCT, state.octSizeGroupWidth, state.octSizeDelimiter)
                     }
@@ -147,7 +147,7 @@ private constructor(expression: PyExpression, integer: BigInteger) {
             tr {
                 td { +message("text.OctalCode") }
                 td {
-                    pre {
+                    snippet {
                         style = codeStyle
                         +wrapper.toLiteral(Radix.OCT, state.octCodeGroupWidth)
                     }
@@ -156,7 +156,7 @@ private constructor(expression: PyExpression, integer: BigInteger) {
             tr {
                 td { +message("text.BinarySize") }
                 td {
-                    pre {
+                    snippet {
                         style = textStyle
                         +wrapper.toRadix(Radix.BIN, state.binSizeGroupWidth, state.binSizeDelimiter)
                     }
@@ -165,7 +165,7 @@ private constructor(expression: PyExpression, integer: BigInteger) {
             tr {
                 td { +message("text.BinaryCode") }
                 td {
-                    pre {
+                    snippet {
                         style = codeStyle
                         +wrapper.toLiteral(Radix.BIN, state.binCodeGroupWidth)
                     }

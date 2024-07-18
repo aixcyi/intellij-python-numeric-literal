@@ -80,7 +80,7 @@ class IntegerWrapper(private val integer: BigInteger) {
         .run {
             padStart(
                 length = max(this.length, depth ?: 0).nextHighestOneBit(),
-                padChar = if (isNegative) '1' else '0',
+                padChar = this[0],
             )
         }
 }

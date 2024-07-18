@@ -6,10 +6,7 @@ import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.ColoredListCellRenderer
 import com.intellij.ui.SimpleTextAttributes
-import com.intellij.ui.dsl.builder.bindItem
-import com.intellij.ui.dsl.builder.bindText
-import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.builder.toNullableProperty
+import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.layout.ComboBoxPredicate
 import java.awt.Font
 import javax.swing.JList
@@ -59,18 +56,14 @@ class PNLSettingsComponent {
 
     val panel = panel {
         group(message("separator.BitViewSetting.text")) {
-            row(message("label.BitViewMode.text")) {
-                visible(false)  // TODO: 解决 SegmentedButton 绑定问题前暂时屏蔽该设置
-                segmentedButton(listOf(false, true)) {
-                    this.text =
-                        if (it) message("button.DisplaySignedInteger.text")
-                        else message("button.DisplayUnsignedInteger.text")
-                }.whenItemSelectedFromUi {
-                    state.viewUnsigned = it
-                }.apply {
-                    selectedItem = state.viewUnsigned
+            buttonsGroup {
+                row(message("label.BitViewMode.text")) {
+                    radioButton(message("button.DisplaySignedInteger.text"), false)
+                    radioButton(message("button.DisplayUnsignedInteger.text"), true)
                 }
-            }
+            }.bind(
+                state::viewUnsigned
+            )
             row(message("label.MinBitDepth.text")) {
                 comboBox(OPTIONS_DEPTHS.keys, myBitDepthRenderer)
                     .bindItem(state::viewBitDepth.toNullableProperty())

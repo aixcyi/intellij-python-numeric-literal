@@ -1,5 +1,9 @@
 package cn.aixcyi.plugin.pnl.utils
 
+import com.jetbrains.python.PyTokenTypes
+import com.jetbrains.python.psi.PyExpression
+import com.jetbrains.python.psi.PyNumericLiteralExpression
+import com.jetbrains.python.psi.PyPrefixExpression
 import java.math.BigInteger
 import kotlin.math.max
 
@@ -16,12 +20,43 @@ enum class Radix(val radix: Int, val prefix: String) {
 }
 
 /**
- * 整数包装器，用于控制前缀、进位、分组的输出。
+ * Python 整数字面值包装器。用于实际值的解析，以及控制前缀、进位、分组的输出。
  *
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  * @see [Radix]
  */
-class IntegerWrapper(private val integer: BigInteger) {
+class PyIntWrapper(val expression: PyExpression, val integer: BigInteger) {
+
+    companion object {
+        @JvmStatic
+        fun getInstance(numeric: PyNumericLiteralExpression): PyIntWrapper {
+            val (exp, int) = evaluate(Pair(numeric, numeric.bigIntegerValue!!))
+            return PyIntWrapper(exp, int)
+        }
+
+        private fun evaluate(pair: Pair<PyExpression, BigInteger>): Pair<PyExpression, BigInteger> {
+            val expression = pair.first.parent
+            if (expression !is PyPrefixExpression)
+                return pair
+            return evaluate(
+                Pair(
+                    expression,
+                    when (expression.operator) {
+                        PyTokenTypes.PLUS -> pair.second
+                        PyTokenTypes.MINUS -> pair.second.negate()
+                        PyTokenTypes.TILDE -> pair.second.not()
+                        else -> pair.second
+                    }
+                )
+            )
+        }
+    }
+
+    val literal = run {  // "-2077" -> Pair("-", "2077")
+        val regex = "^([-+~]*)([0-9A-Za-z]+)$".toRegex()
+        val result = regex.find(expression.text)!!
+        LiteralNumeric(result.groupValues[1], result.groupValues[2])
+    }
 
     private val isNegative = integer.signum() < 0
 
@@ -83,4 +118,9 @@ class IntegerWrapper(private val integer: BigInteger) {
                 padChar = this[0],
             )
         }
+
+    data class LiteralNumeric(
+        val symbols: String,
+        val digits: String,
+    )
 }

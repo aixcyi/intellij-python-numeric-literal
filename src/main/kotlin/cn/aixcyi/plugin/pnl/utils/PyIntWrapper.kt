@@ -1,5 +1,6 @@
 package cn.aixcyi.plugin.pnl.utils
 
+import cn.aixcyi.plugin.pnl.utils.PyIntWrapper.Radix
 import com.jetbrains.python.PyTokenTypes
 import com.jetbrains.python.psi.PyExpression
 import com.jetbrains.python.psi.PyNumericLiteralExpression
@@ -8,24 +9,14 @@ import java.math.BigInteger
 import kotlin.math.max
 
 /**
- * 常见的进位制。
- *
- * @author <a href="https://github.com/aixcyi">砹小翼</a>
- */
-enum class Radix(val radix: Int, val prefix: String) {
-    BIN(2, "0b"),
-    OCT(8, "0o"),
-    HEX(16, "0x"),
-    DEC(10, "");
-}
-
-/**
  * Python 整数字面值包装器。用于实际值的解析，以及控制前缀、进位、分组的输出。
  *
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  * @see [Radix]
  */
-class PyIntWrapper(val expression: PyExpression, val integer: BigInteger) {
+@Suppress("MemberVisibilityCanBePrivate")
+class PyIntWrapper
+private constructor(val expression: PyExpression, val integer: BigInteger) {
 
     companion object {
         @JvmStatic
@@ -55,7 +46,7 @@ class PyIntWrapper(val expression: PyExpression, val integer: BigInteger) {
     val literal = run {  // "-2077" -> Pair("-", "2077")
         val regex = "^([-+~]*)([0-9A-Za-z]+)$".toRegex()
         val result = regex.find(expression.text)!!
-        LiteralNumeric(result.groupValues[1], result.groupValues[2])
+        NumericLiteral(result.groupValues[1], result.groupValues[2])
     }
 
     private val isNegative = integer.signum() < 0
@@ -119,8 +110,27 @@ class PyIntWrapper(val expression: PyExpression, val integer: BigInteger) {
             )
         }
 
-    data class LiteralNumeric(
+    /**
+     * 数字字面值。
+     *
+     * @author <a href="https://github.com/aixcyi">砹小翼</a>
+     */
+    data class NumericLiteral(
+        /** 数字字面值的符号部分。 */
         val symbols: String,
+        /** 数字字面值的数字部分。 */
         val digits: String,
     )
+
+    /**
+     * 常见进位制。
+     *
+     * @author <a href="https://github.com/aixcyi">砹小翼</a>
+     */
+    enum class Radix(val radix: Int, val prefix: String) {
+        BIN(2, "0b"),
+        OCT(8, "0o"),
+        HEX(16, "0x"),
+        DEC(10, "");
+    }
 }

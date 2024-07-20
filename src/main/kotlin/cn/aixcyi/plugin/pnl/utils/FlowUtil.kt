@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package cn.aixcyi.plugin.pnl.utils
 
 import com.intellij.openapi.diagnostic.thisLogger

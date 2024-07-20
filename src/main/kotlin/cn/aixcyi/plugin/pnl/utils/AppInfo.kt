@@ -7,6 +7,7 @@ import com.intellij.openapi.application.ApplicationInfo
  *
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  */
+@Suppress("MemberVisibilityCanBePrivate")
 class AppInfo private constructor(info: ApplicationInfo) {
 
     companion object {
@@ -25,7 +26,7 @@ class AppInfo private constructor(info: ApplicationInfo) {
     // 不同公司有不同的版本号递增规则，结合二者才能加以区分
 
     val version = eval { info.strictVersion.split('.').map(String::toUInt) } ?: listOf(0u, 0u)
-    val company = info.shortCompanyName
+    val company = info.shortCompanyName ?: ""
 
     /**
      * Documentation 是否支持嵌套 `<pre></pre>` 。

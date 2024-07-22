@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "cn.aixcyi.plugin"
-version = "1.0.0-SNAPSHOT"  // https://semver.org/lang/zh-CN/
+version = "1.0.0"  // https://semver.org/lang/zh-CN/
 
 repositories {
     mavenLocal()
@@ -49,7 +49,7 @@ tasks {
     }
     runIde {
         jvmArgs = listOf(
-            // "-Duser.language=en_US",
+            // "-Duser.language=en",
             // "-XX:+UnlockDiagnosticVMOptions",
         )
     }

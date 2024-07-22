@@ -5,4 +5,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Python-Numeric-Literal"
+rootProject.name = "HooTool-Python-Numeric-Literal"

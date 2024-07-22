@@ -45,7 +45,7 @@ tasks {
         kotlinOptions.jvmTarget = "17"
     }
     initializeIntelliJPlugin {
-        // selfUpdateCheck = false
+        selfUpdateCheck = false
     }
     runIde {
         jvmArgs = listOf(

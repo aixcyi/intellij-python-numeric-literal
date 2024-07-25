@@ -2,7 +2,6 @@ package cn.aixcyi.plugin.pnl.utils
 
 import cn.aixcyi.plugin.pnl.Zoo.message
 import cn.aixcyi.plugin.pnl.storage.PNLSettings
-import cn.aixcyi.plugin.pnl.utils.PyIntWrapper.Radix
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.jetbrains.python.highlighting.PyHighlighter
@@ -14,7 +13,8 @@ import kotlinx.html.*
  *
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  */
-class PyIntDocumentationBuilder private constructor(expression: PyNumericLiteralExpression) {
+class PyIntDocumentationBuilder
+private constructor(private val wrapper: PyIntegerLiteral) {
 
     companion object {
         val PY_OPERATION_SIGN =
@@ -24,13 +24,10 @@ class PyIntDocumentationBuilder private constructor(expression: PyNumericLiteral
 
         @JvmStatic
         fun getInstance(expression: PyNumericLiteralExpression): PyIntDocumentationBuilder? {
-            if (expression.bigIntegerValue == null)
-                return null
-            return PyIntDocumentationBuilder(expression)
+            return PyIntegerLiteral.of(expression)?.let { PyIntDocumentationBuilder(it) }
         }
     }
 
-    private val wrapper = PyIntWrapper.getInstance(expression)
     private val state = PNLSettings.getInstance().state
     private val scheme = EditorColorsManager.getInstance().schemeForCurrentUITheme
     private val fontSize = scheme.fontPreferences.getSize(scheme.fontPreferences.fontFamily)
@@ -41,11 +38,11 @@ class PyIntDocumentationBuilder private constructor(expression: PyNumericLiteral
         .definition {
             span {
                 style = operationColor.toHtmlStyleCodeRGB()
-                +wrapper.literal.symbols
+                +wrapper.operators
             }
             span {
                 style = numberColor.toHtmlStyleCodeRGB()
-                +wrapper.literal.digits
+                +wrapper.digits.text
             }
         }
         .contentTable {

@@ -1,6 +1,5 @@
 package cn.aixcyi.plugin.pnl.utils
 
-import cn.aixcyi.plugin.pnl.utils.PyIntWrapper.Radix
 import com.jetbrains.python.PyTokenTypes
 import com.jetbrains.python.psi.PyExpression
 import com.jetbrains.python.psi.PyNumericLiteralExpression
@@ -11,42 +10,66 @@ import kotlin.math.max
 /**
  * Python 整数字面值包装器。用于实际值的解析，以及控制前缀、进位、分组的输出。
  *
+ * @param digits 字面值的数字部分。
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ * @see <a href="https://docs.python.org/zh-cn/3/reference/lexical_analysis.html#integer-literals">整数字面值</a>
  * @see [Radix]
  */
-@Suppress("MemberVisibilityCanBePrivate")
-class PyIntWrapper
-private constructor(val expression: PyExpression, val integer: BigInteger) {
+class PyIntegerLiteral
+private constructor(val digits: PyNumericLiteralExpression) {
 
-    companion object {
-        @JvmStatic
-        fun getInstance(numeric: PyNumericLiteralExpression): PyIntWrapper {
-            val (exp, int) = evaluate(Pair(numeric, numeric.bigIntegerValue!!))
-            return PyIntWrapper(exp, int)
-        }
+    /** 字面值的完整表达式，包括符号部分和数字部分。 */
+    val expression: PyPrefixExpression
 
-        private fun evaluate(pair: Pair<PyExpression, BigInteger>): Pair<PyExpression, BigInteger> {
-            val expression = pair.first.parent
-            if (expression !is PyPrefixExpression)
-                return pair
-            return evaluate(
-                Pair(
-                    expression,
-                    when (expression.operator) {
-                        PyTokenTypes.PLUS -> pair.second
-                        PyTokenTypes.MINUS -> pair.second.negate()
-                        PyTokenTypes.TILDE -> pair.second.not()
-                        else -> pair.second
-                    }
-                )
-            )
+    /** 字面值的符号部分。 */
+    val operators: String
+
+    /** 字面值实际值。 */
+    val integer: BigInteger
+
+    /** 整数进位制。 */
+    val radix: Radix
+
+    init {
+        val (exp, ops, int) = evaluate(Triple(digits, StringBuilder(), digits.bigIntegerValue!!))
+        this.expression = exp as PyPrefixExpression
+        this.operators = ops.toString()
+        this.integer = int
+
+        val digits = this.digits.text
+        this.radix = when {
+            digits.startsWith(Radix.HEX.prefix, true) -> Radix.HEX
+            digits.startsWith(Radix.OCT.prefix, true) -> Radix.OCT
+            digits.startsWith(Radix.BIN.prefix, true) -> Radix.BIN
+            else -> Radix.DEC
         }
     }
 
-    val literal = run {  // "-2077" -> Pair("-", "2077")
-        val regex = "^([-+~]*)([0-9A-Za-z]+)$".toRegex()
-        val result = regex.find(expression.text)!!
-        NumericLiteral(result.groupValues[1], result.groupValues[2])
+    companion object {
+        @JvmStatic
+        fun of(numeric: PyNumericLiteralExpression): PyIntegerLiteral? {
+            if (!numeric.isIntegerLiteral || numeric.bigIntegerValue == null)
+                return null
+            return PyIntegerLiteral(numeric)
+        }
+
+        private fun evaluate(tuple: Triple<PyExpression, StringBuilder, BigInteger>): Triple<PyExpression, StringBuilder, BigInteger> {
+            var (exp, ops, int) = tuple
+            exp = eval { exp.parent as PyPrefixExpression } ?: return tuple
+            ops = when (exp.operator) {
+                PyTokenTypes.PLUS -> ops.insert(0, '+')
+                PyTokenTypes.MINUS -> ops.insert(0, '-')
+                PyTokenTypes.TILDE -> ops.insert(0, '~')
+                else -> ops
+            }
+            int = when (exp.operator) {
+                PyTokenTypes.PLUS -> int
+                PyTokenTypes.MINUS -> int.negate()
+                PyTokenTypes.TILDE -> int.not()
+                else -> int
+            }
+            return evaluate(Triple(exp, ops, int))
+        }
     }
 
     private val isNegative = integer.signum() < 0
@@ -121,16 +144,16 @@ private constructor(val expression: PyExpression, val integer: BigInteger) {
         /** 数字字面值的数字部分。 */
         val digits: String,
     )
+}
 
-    /**
-     * 常见进位制。
-     *
-     * @author <a href="https://github.com/aixcyi">砹小翼</a>
-     */
-    enum class Radix(val radix: Int, val prefix: String) {
-        BIN(2, "0b"),
-        OCT(8, "0o"),
-        HEX(16, "0x"),
-        DEC(10, "");
-    }
+/**
+ * 常见进位制。
+ *
+ * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ */
+enum class Radix(val radix: Int, val prefix: String) {
+    BIN(2, "0b"),
+    OCT(8, "0o"),
+    HEX(16, "0x"),
+    DEC(10, "");
 }

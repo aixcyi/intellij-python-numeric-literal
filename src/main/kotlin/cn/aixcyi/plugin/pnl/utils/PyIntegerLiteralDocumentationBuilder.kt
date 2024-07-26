@@ -13,7 +13,7 @@ import kotlinx.html.*
  *
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  */
-class PyIntDocumentationBuilder
+class PyIntegerLiteralDocumentationBuilder
 private constructor(private val wrapper: PyIntegerLiteral) {
 
     companion object {
@@ -23,8 +23,8 @@ private constructor(private val wrapper: PyIntegerLiteral) {
                 .get(null) as TextAttributesKey
 
         @JvmStatic
-        fun getInstance(expression: PyNumericLiteralExpression): PyIntDocumentationBuilder? {
-            return PyIntegerLiteral.of(expression)?.let { PyIntDocumentationBuilder(it) }
+        fun getInstance(expression: PyNumericLiteralExpression): PyIntegerLiteralDocumentationBuilder? {
+            return PyIntegerLiteral.of(expression)?.let { PyIntegerLiteralDocumentationBuilder(it) }
         }
     }
 

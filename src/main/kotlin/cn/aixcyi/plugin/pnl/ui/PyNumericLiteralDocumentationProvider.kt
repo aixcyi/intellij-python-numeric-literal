@@ -1,6 +1,6 @@
 package cn.aixcyi.plugin.pnl.ui
 
-import cn.aixcyi.plugin.pnl.utils.PyIntDocumentationBuilder
+import cn.aixcyi.plugin.pnl.utils.PyIntegerLiteralDocumentationBuilder
 import com.intellij.lang.documentation.AbstractDocumentationProvider
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
@@ -13,7 +13,7 @@ import com.jetbrains.python.psi.PyNumericLiteralExpression
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  * @see <a href="https://plugins.jetbrains.com/docs/intellij/code-documentation.html">Documentation | IntelliJ Platform Plugin SDK</a>
  */
-class PyNumDocumentationProvider : AbstractDocumentationProvider() {
+class PyNumericLiteralDocumentationProvider : AbstractDocumentationProvider() {
 
     override fun getCustomDocumentationElement(
         editor: Editor,
@@ -31,7 +31,7 @@ class PyNumDocumentationProvider : AbstractDocumentationProvider() {
         if (element !is PyNumericLiteralExpression)
             return null
         if (element.isIntegerLiteral)
-            return PyIntDocumentationBuilder.getInstance(element)?.buildMultiRadixTable()
+            return PyIntegerLiteralDocumentationBuilder.getInstance(element)?.buildMultiRadixTable()
         // 小数、虚数不作处理
         return null
     }
@@ -40,7 +40,7 @@ class PyNumDocumentationProvider : AbstractDocumentationProvider() {
         if (element !is PyNumericLiteralExpression)
             return null
         if (element.isIntegerLiteral)
-            return PyIntDocumentationBuilder.getInstance(element)?.buildBitView()
+            return PyIntegerLiteralDocumentationBuilder.getInstance(element)?.buildBitView()
         // 小数、虚数不作处理
         return null
     }

@@ -11,7 +11,7 @@ import com.jetbrains.python.psi.PyNumericLiteralExpression
  *
  * @author <a href="https://github.com/aixcyi">砹小翼</a>
  */
-class PyNumReferenceProvider : ImplicitReferenceProvider {
+class PyNumericLiteralReferenceProvider : ImplicitReferenceProvider {
 
     override fun resolveAsReference(element: PsiElement): MutableCollection<out Symbol> {
         if (element !is PyNumericLiteralExpression)

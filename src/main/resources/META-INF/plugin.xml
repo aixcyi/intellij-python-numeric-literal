@@ -27,10 +27,10 @@
     <extensions defaultExtensionNs="com.intellij.lang">
         <documentationProvider
                 language="Python"
-                implementationClass="cn.aixcyi.plugin.pnl.ui.PyNumDocumentationProvider"/>
+                implementationClass="cn.aixcyi.plugin.pnl.ui.PyNumericLiteralDocumentationProvider"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij.psi">
-        <implicitReferenceProvider implementation="cn.aixcyi.plugin.pnl.ui.PyNumReferenceProvider"/>
+        <implicitReferenceProvider implementation="cn.aixcyi.plugin.pnl.ui.PyNumericLiteralReferenceProvider"/>
     </extensions>
 
     <!-- action 的 text 中的下划线被转义了，所以需要用双下划线来表示下划线，譬如 "__all__" 要写成 "____all____" -->

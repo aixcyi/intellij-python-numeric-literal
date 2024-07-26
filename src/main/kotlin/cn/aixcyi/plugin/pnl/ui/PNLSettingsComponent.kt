@@ -1,7 +1,7 @@
 package cn.aixcyi.plugin.pnl.ui
 
 import cn.aixcyi.plugin.pnl.Zoo.message
-import cn.aixcyi.plugin.pnl.storage.PNLSettings
+import cn.aixcyi.plugin.pnl.services.PNLSettings
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.ColoredListCellRenderer

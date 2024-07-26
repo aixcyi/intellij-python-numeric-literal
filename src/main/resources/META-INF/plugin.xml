@@ -16,7 +16,7 @@
 
     <!-- 插件实现的扩展：https://plugins.jetbrains.com/docs/intellij/plugin-extensions.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="cn.aixcyi.plugin.pnl.storage.PNLSettings"/>
+        <applicationService serviceImplementation="cn.aixcyi.plugin.pnl.services.PNLSettings"/>
         <applicationConfigurable
                 parentId="tools"
                 id="HooTool.PNL.SettingsConfigurable"

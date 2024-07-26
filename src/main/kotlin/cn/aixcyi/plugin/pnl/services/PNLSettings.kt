@@ -1,4 +1,4 @@
-package cn.aixcyi.plugin.pnl.storage
+package cn.aixcyi.plugin.pnl.services
 
 import cn.aixcyi.plugin.pnl.Zoo
 import cn.aixcyi.plugin.pnl.ui.PNLSettingsComponent

@@ -1,7 +1,7 @@
 package cn.aixcyi.plugin.pnl.ui
 
 import cn.aixcyi.plugin.pnl.Zoo.message
-import cn.aixcyi.plugin.pnl.storage.PNLSettings
+import cn.aixcyi.plugin.pnl.services.PNLSettings
 import com.intellij.openapi.options.SearchableConfigurable
 import javax.swing.JComponent
 

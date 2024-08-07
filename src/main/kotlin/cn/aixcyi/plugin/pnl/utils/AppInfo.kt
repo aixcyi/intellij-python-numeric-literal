@@ -1,11 +1,12 @@
 package cn.aixcyi.plugin.pnl.utils
 
 import com.intellij.openapi.application.ApplicationInfo
+import net.aixcyi.utils.eval
 
 /**
  * IDE 信息。
  *
- * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ * @author <a href="https://github.com/aixcyi/">砹小翼</a>
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class AppInfo private constructor(info: ApplicationInfo) {

@@ -1,7 +1,8 @@
-package cn.aixcyi.plugin.pnl.utils
+package cn.aixcyi.plugin.pnl.documentation
 
 import cn.aixcyi.plugin.pnl.Zoo.message
-import cn.aixcyi.plugin.pnl.services.PNLSettings
+import cn.aixcyi.plugin.pnl.settings.PyNumericLiteralSettings
+import cn.aixcyi.plugin.pnl.utils.toHtmlStyleCodeRGB
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.jetbrains.python.highlighting.PyHighlighter
@@ -11,7 +12,7 @@ import kotlinx.html.*
 /**
  * Python 整数字面值文档构建器。
  *
- * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ * @author <a href="https://github.com/aixcyi/">砹小翼</a>
  */
 class PyIntegerLiteralDocumentationBuilder
 private constructor(private val wrapper: PyIntegerLiteral) {
@@ -28,7 +29,7 @@ private constructor(private val wrapper: PyIntegerLiteral) {
         }
     }
 
-    private val state = PNLSettings.getInstance().state
+    private val state = PyNumericLiteralSettings.getInstance().state
     private val scheme = EditorColorsManager.getInstance().schemeForCurrentUITheme
     private val fontSize = scheme.fontPreferences.getSize(scheme.fontPreferences.fontFamily)
     private val numberColor = scheme.getAttributes(PyHighlighter.PY_NUMBER).foregroundColor

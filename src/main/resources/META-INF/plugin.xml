@@ -3,7 +3,7 @@
 
     <id>cn.aixcyi.pnl</id>
     <name>HooTool - Python Numeric Literal</name>
-    <vendor email="75880483+aixcyi@users.noreply.github.com" url="https://github.com/aixcyi">aixcyi</vendor>
+    <vendor email="75880483+aixcyi@users.noreply.github.com" url="https://github.com/aixcyi/">aixcyi</vendor>
     <resource-bundle>messages.PythonNumericLiteral</resource-bundle>
 
     <!-- 插件兼容性要求：https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -16,21 +16,22 @@
 
     <!-- 插件实现的扩展：https://plugins.jetbrains.com/docs/intellij/plugin-extensions.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="cn.aixcyi.plugin.pnl.services.PNLSettings"/>
+        <applicationService serviceImplementation="cn.aixcyi.plugin.pnl.settings.PyNumericLiteralSettings"/>
         <applicationConfigurable
                 parentId="tools"
                 id="HooTool.PNL.SettingsConfigurable"
-                instance="cn.aixcyi.plugin.pnl.ui.PNLSettingsConfigurable"
+                instance="cn.aixcyi.plugin.pnl.settings.PyNumericLiteralSettingsConfigurable"
                 key="configurable.Settings.display_name">
         </applicationConfigurable>
     </extensions>
     <extensions defaultExtensionNs="com.intellij.lang">
         <documentationProvider
                 language="Python"
-                implementationClass="cn.aixcyi.plugin.pnl.ui.PyNumericLiteralDocumentationProvider"/>
+                implementationClass="cn.aixcyi.plugin.pnl.documentation.PyNumericLiteralDocumentationProvider"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij.psi">
-        <implicitReferenceProvider implementation="cn.aixcyi.plugin.pnl.ui.PyNumericLiteralReferenceProvider"/>
+        <implicitReferenceProvider
+                implementation="cn.aixcyi.plugin.pnl.documentation.PyNumericLiteralReferenceProvider"/>
     </extensions>
 
     <!-- action 的 text 中的下划线被转义了，所以需要用双下划线来表示下划线，譬如 "__all__" 要写成 "____all____" -->

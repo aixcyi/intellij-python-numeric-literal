@@ -1,24 +1,23 @@
-package cn.aixcyi.plugin.pnl.services
+package cn.aixcyi.plugin.pnl.settings
 
 import cn.aixcyi.plugin.pnl.Zoo
-import cn.aixcyi.plugin.pnl.ui.PNLSettingsComponent
 import com.intellij.openapi.components.*
 
 /**
  * 整数字面值分组设置。
  *
- * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ * @author <a href="https://github.com/aixcyi/">砹小翼</a>
  */
 @Service(Service.Level.APP)
 @State(name = Zoo.XmlComponent.PNL, storages = [Storage(Zoo.PLUGIN_STORAGE)])
-class PNLSettings : SimplePersistentStateComponent<PNLSettings.State>(State()) {
+class PyNumericLiteralSettings : SimplePersistentStateComponent<PyNumericLiteralSettings.State>(State()) {
 
     companion object {
-        fun getInstance() = service<PNLSettings>()
+        fun getInstance() = service<PyNumericLiteralSettings>()
     }
 
     /**
-     * @see [PNLSettingsComponent.Companion]
+     * @see [PyNumericLiteralSettingsComponent.Companion]
      */
     class State : BaseState() {
         // Ctrl-Hover 设置

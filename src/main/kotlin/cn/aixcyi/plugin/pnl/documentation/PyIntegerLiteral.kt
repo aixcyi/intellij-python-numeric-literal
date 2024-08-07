@@ -1,9 +1,11 @@
-package cn.aixcyi.plugin.pnl.utils
+package cn.aixcyi.plugin.pnl.documentation
 
+import cn.aixcyi.plugin.pnl.utils.nextHighestOneBit
 import com.jetbrains.python.PyTokenTypes
 import com.jetbrains.python.psi.PyExpression
 import com.jetbrains.python.psi.PyNumericLiteralExpression
 import com.jetbrains.python.psi.PyPrefixExpression
+import net.aixcyi.utils.eval
 import java.math.BigInteger
 import kotlin.math.max
 
@@ -11,7 +13,7 @@ import kotlin.math.max
  * Python 整数字面值包装器。用于实际值的解析，以及控制前缀、进位、分组的输出。
  *
  * @param digits 字面值的数字部分。
- * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ * @author <a href="https://github.com/aixcyi/">砹小翼</a>
  * @see <a href="https://docs.python.org/zh-cn/3/reference/lexical_analysis.html#integer-literals">整数字面值</a>
  * @see [Radix]
  */
@@ -136,7 +138,7 @@ private constructor(val digits: PyNumericLiteralExpression) {
     /**
      * 数字字面值。
      *
-     * @author <a href="https://github.com/aixcyi">砹小翼</a>
+     * @author <a href="https://github.com/aixcyi/">砹小翼</a>
      */
     data class NumericLiteral(
         /** 数字字面值的符号部分。 */
@@ -149,7 +151,7 @@ private constructor(val digits: PyNumericLiteralExpression) {
 /**
  * 常见进位制。
  *
- * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ * @author <a href="https://github.com/aixcyi/">砹小翼</a>
  */
 enum class Radix(val radix: Int, val prefix: String) {
     BIN(2, "0b"),

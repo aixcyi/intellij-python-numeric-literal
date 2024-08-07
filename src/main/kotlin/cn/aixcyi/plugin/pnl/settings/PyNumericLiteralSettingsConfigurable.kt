@@ -1,22 +1,21 @@
-package cn.aixcyi.plugin.pnl.ui
+package cn.aixcyi.plugin.pnl.settings
 
 import cn.aixcyi.plugin.pnl.Zoo.message
-import cn.aixcyi.plugin.pnl.services.PNLSettings
 import com.intellij.openapi.options.SearchableConfigurable
 import javax.swing.JComponent
 
 /**
  * 插件设置首页。
  *
- * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ * @author <a href="https://github.com/aixcyi/">砹小翼</a>
  */
-class PNLSettingsConfigurable : SearchableConfigurable {
+class PyNumericLiteralSettingsConfigurable : SearchableConfigurable {
 
     companion object {
         const val ID = "HooTool.PNL.SettingsConfigurable"
     }
 
-    private var myComponent: PNLSettingsComponent? = null
+    private var myComponent: PyNumericLiteralSettingsComponent? = null
 
     override fun getId() = ID
 
@@ -25,7 +24,7 @@ class PNLSettingsConfigurable : SearchableConfigurable {
     override fun getPreferredFocusedComponent(): JComponent? = myComponent?.preferredFocusedComponent
 
     override fun createComponent(): JComponent {
-        myComponent = PNLSettingsComponent()
+        myComponent = PyNumericLiteralSettingsComponent()
         return myComponent!!.panel
     }
 
@@ -37,7 +36,7 @@ class PNLSettingsConfigurable : SearchableConfigurable {
         if (myComponent == null)
             return
         myComponent!!.panel.apply()
-        PNLSettings.getInstance().loadState(myComponent!!.state)
+        PyNumericLiteralSettings.getInstance().loadState(myComponent!!.state)
     }
 
     override fun reset() {

@@ -1,5 +1,6 @@
-package cn.aixcyi.plugin.pnl.utils
+package cn.aixcyi.plugin.pnl.documentation
 
+import cn.aixcyi.plugin.pnl.utils.AppInfo
 import com.intellij.lang.documentation.DocumentationMarkup
 import com.intellij.lang.documentation.DocumentationProvider
 import kotlinx.html.*
@@ -8,7 +9,7 @@ import kotlinx.html.stream.appendHTML
 /**
  * 提供对 [DocumentationProvider] 硬编码的简易封装。
  *
- * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ * @author <a href="https://github.com/aixcyi/">砹小翼</a>
  * @see [DocumentationMarkup]
  */
 @Suppress("unused")

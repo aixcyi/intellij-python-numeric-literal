@@ -1,6 +1,5 @@
-package cn.aixcyi.plugin.pnl.ui
+package cn.aixcyi.plugin.pnl.documentation
 
-import cn.aixcyi.plugin.pnl.utils.PyIntegerLiteralDocumentationBuilder
 import com.intellij.lang.documentation.AbstractDocumentationProvider
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
@@ -10,7 +9,7 @@ import com.jetbrains.python.psi.PyNumericLiteralExpression
 /**
  * Python 数字字面值文档。
  *
- * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ * @author <a href="https://github.com/aixcyi/">砹小翼</a>
  * @see <a href="https://plugins.jetbrains.com/docs/intellij/code-documentation.html">Documentation | IntelliJ Platform Plugin SDK</a>
  */
 class PyNumericLiteralDocumentationProvider : AbstractDocumentationProvider() {

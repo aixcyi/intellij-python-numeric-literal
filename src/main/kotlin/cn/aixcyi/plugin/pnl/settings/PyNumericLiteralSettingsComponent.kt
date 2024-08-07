@@ -1,7 +1,6 @@
-package cn.aixcyi.plugin.pnl.ui
+package cn.aixcyi.plugin.pnl.settings
 
 import cn.aixcyi.plugin.pnl.Zoo.message
-import cn.aixcyi.plugin.pnl.services.PNLSettings
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.ColoredListCellRenderer
@@ -14,9 +13,9 @@ import javax.swing.JList
 /**
  * 插件设置首页组件。
  *
- * @author <a href="https://github.com/aixcyi">砹小翼</a>
+ * @author <a href="https://github.com/aixcyi/">砹小翼</a>
  */
-class PNLSettingsComponent {
+class PyNumericLiteralSettingsComponent {
 
     companion object {
         private val OPTIONS_DEPTHS = mapOf(8 to "byte", 16 to "short", 32 to "int", 64 to "long", 128 to "long long")
@@ -52,7 +51,7 @@ class PNLSettingsComponent {
         Font(fontFamily, Font.PLAIN, preferences.getSize(fontFamily))
     }
 
-    val state = PNLSettings.getInstance().state
+    val state = PyNumericLiteralSettings.getInstance().state
 
     val panel = panel {
         group(message("separator.BitViewSetting.text")) {

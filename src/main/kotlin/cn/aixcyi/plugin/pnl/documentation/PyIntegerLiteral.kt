@@ -20,8 +20,13 @@ import kotlin.math.max
 class PyIntegerLiteral
 private constructor(val digits: PyNumericLiteralExpression) {
 
-    /** 字面值的完整表达式，包括符号部分和数字部分。 */
-    val expression: PyPrefixExpression
+    /**
+     * 字面值的完整表达式，包括符号部分和数字部分。
+     *
+     * - 编辑器中有前缀符号时为 [PyPrefixExpression]
+     * - 编辑器中无前缀符号则为 [PyNumericLiteralExpression]
+     */
+    val expression: PyExpression
 
     /** 字面值的符号部分。 */
     val operators: String
@@ -34,7 +39,7 @@ private constructor(val digits: PyNumericLiteralExpression) {
 
     init {
         val (exp, ops, int) = evaluate(Triple(digits, StringBuilder(), digits.bigIntegerValue!!))
-        this.expression = exp as PyPrefixExpression
+        this.expression = exp
         this.operators = ops.toString()
         this.integer = int
 
@@ -134,18 +139,6 @@ private constructor(val digits: PyNumericLiteralExpression) {
                 padChar = this[0],
             )
         }
-
-    /**
-     * 数字字面值。
-     *
-     * @author <a href="https://github.com/aixcyi/">砹小翼</a>
-     */
-    data class NumericLiteral(
-        /** 数字字面值的符号部分。 */
-        val symbols: String,
-        /** 数字字面值的数字部分。 */
-        val digits: String,
-    )
 }
 
 /**

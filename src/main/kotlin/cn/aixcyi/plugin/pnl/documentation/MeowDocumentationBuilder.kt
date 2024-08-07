@@ -13,9 +13,9 @@ import net.aixcyi.utils.Version
  * @author <a href="https://github.com/aixcyi/">砹小翼</a>
  * @see [DocumentationMarkup]
  */
-@Suppress("unused")
 class MeowDocumentationBuilder private constructor() {
 
+    @Suppress("unused")
     companion object {
         const val DEFINITION_CLASS = "definition"
         const val CONTENT_CLASS = "content"

@@ -2,7 +2,6 @@ package cn.aixcyi.plugin.pnl.documentation
 
 import com.intellij.model.Symbol
 import com.intellij.model.psi.ImplicitReferenceProvider
-import com.intellij.model.psi.PsiSymbolService
 import com.intellij.psi.PsiElement
 import com.jetbrains.python.psi.PyNumericLiteralExpression
 
@@ -17,7 +16,7 @@ class PyNumericLiteralReferenceProvider : ImplicitReferenceProvider {
         if (element !is PyNumericLiteralExpression)
             return mutableListOf()
         return mutableListOf(
-            PsiSymbolService.getInstance().asSymbol(element)
+            // PsiSymbolService.getInstance().asSymbol(element)
         )
     }
 }

@@ -1,17 +1,25 @@
-# Python Numeric Literal
+# HooTool - Python Numeric Literal
 
-[中文](./README.md)／[English](./README_EN.md)／...
+[简体中文](./README.md)／[English](./README_EN.md)／...
 
-An IntelliJ-based IDE plugin, provide documentation for Python numeric literal.
+A plugin for PyCharm, provide documentation for Python numeric literal.
 
-## Usage
+## Features
 
-Just move your mouse over a literal integer.
-Bits view will be shown instead of Radix view if you hold down Ctrl in the same time.
+- Integer radix panel. Just move mouse hover a literal integer on editor.
 
 _Plugin supports documentation for all numeric literals,_
 _but currently only integer have actual functionality._
 
-## Bug Tracking
+## Compatibility
 
-- [GitHub issue](https://github.com/aixcyi/intellij-python-numeric-literal/issues)
+- PyCharm, both Community and Professional Edition,
+  see [Marketplace](https://plugins.jetbrains.com/plugin/24912-hootool--python-numeric-literal/versions/) for detail
+- IntelliJ-based IDE \(depends on [Python](https://plugins.jetbrains.com/plugin/631-python)
+  or [Python Community Edition](https://plugins.jetbrains.com/plugin/7322-python-community-edition)\)
+- _Not tested on other platforms_
+
+## Links
+
+- [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/24912-hootool--python-numeric-literal/)
+- [Issue Tracker \(GitHub\)](https://github.com/aixcyi/intellij-python-numeric-literal/issues)

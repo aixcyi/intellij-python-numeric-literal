@@ -28,7 +28,7 @@ class Version(vararg val parts: String) {
     var intComparator = { a: String, b: String -> (a.toUShort()).compareTo(b.toUShort()) }
 
     operator fun compareTo(another: Version): Int {
-        for (i in 0..min(parts.size, another.parts.size)) {
+        for (i in 0 until min(parts.size, another.parts.size)) {
             val result = eval {
                 intComparator(parts[i], another.parts[i])
             } ?: run {
